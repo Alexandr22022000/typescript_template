@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from "react";
-//@ts-ignore
-import md5 from "md5";
+import {Md5} from "md5-typescript";
 import Text from "./Text";
 import Button from "./Button";
 import Input from "./Input";
@@ -9,7 +8,7 @@ const Item = (props: Props) => {
   const [editingValue, setEditingValue] = useState<string | null>(null);
 
   let hash = useMemo(() => {
-    return md5(props.children + Date.now());
+    return Md5.init(props.children + Date.now());
   }, [props.children]);
 
   if (editingValue === null)
