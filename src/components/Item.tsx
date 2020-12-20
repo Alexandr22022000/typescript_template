@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from "react";
-import {Md5} from "md5-typescript";
+import { Md5 } from "md5-typescript";
 import Text from "./Text";
 import Button from "./Button";
 import Input from "./Input";

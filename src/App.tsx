@@ -2,6 +2,7 @@ import React from "react";
 import logo from "./logo.svg";
 import List from "./components/List";
 import ThemeToggle from "./components/ThemeToggle";
+import DynamicList from "./components/DynamicList";
 import "./App.css";
 
 function App() {
@@ -9,6 +10,7 @@ function App() {
     <div className="App">
       <List />
       <ThemeToggle />
+      <DynamicList />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
