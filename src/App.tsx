@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import List from "./components/List";
 import ThemeToggle from "./components/ThemeToggle";
 import DynamicList from "./components/DynamicList";
+import WorkerButton from './components/WorkerButton';
 import "./App.css";
 
 function App() {
@@ -11,6 +12,7 @@ function App() {
       <List />
       <ThemeToggle />
       <DynamicList />
+      <WorkerButton />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
