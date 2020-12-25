@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from "axios";
 
 const workerFn = () => {
@@ -13,14 +13,15 @@ const workerFn = () => {
 
 const code = workerFn.toString();
 const blob = new Blob(['('+code+')()']);
-const worker = new Worker('http://localhost:3000/worker.js');
+const worker = new Worker(URL.createObjectURL(blob));
 
 const runWorker = () => {
     return new Promise(resolve => {
         console.log('START');
-        const worker = new Worker('http://localhost:3000/worker.js');
+        const worker = new Worker('worker.js');
         worker.addEventListener('message', result => {
             console.log('END');
+            worker.terminate();
             resolve(result.data);
         });
         worker.postMessage('fetch users');
@@ -30,40 +31,31 @@ const runWorker = () => {
 
 
 const WorkerButton = () => {
-const onClick = () => {
-    const start = Date.now();
+    const [time, setTime] = useState(0);
 
-    const workers = [];
-    for (let i = 0; i < 32; i++) {
-        workers.push(runWorker());
-    }
+    const onClick = () => {
+        const start = Date.now();
+        setTime(-1);
 
-    Promise.all(workers).then(results => {
-        console.log('ALL FINISHED!');
-        console.log(results);
-        console.log("Time: " + ((Date.now() - start) / 1000) + ' s');
-    });
-};
+        const workers = [];
+        for (let i = 0; i < 32; i++) {
+            workers.push(runWorker());
+        }
 
-const upload = () => {
-    const start = Date.now();
-    axios.get('http://localhost:5000/dataset')
-        .then((response) => {
-            console.log(response);
-            console.log('Got: ' + ((Date.now() - start) / 1000) + ' s');
-            console.log(response.data);
-        })
-        .catch((error) => {
-            console.log(error);
+        Promise.all(workers).then(results => {
+            console.log('ALL FINISHED!');
+            console.log(results);
+            console.log("Time: " + ((Date.now() - start) / 1000) + ' s');
+            setTime((Date.now() - start) / 1000);
         });
-};
+    };
 
-return (
-    <>
-        <button onClick={onClick}>Run</button>
-        <button onClick={upload}>Upload</button>
-    </>
-);
+    return (
+        <>
+            <button onClick={onClick}>Run</button>
+            <h1>{"Threads: 32, Time " + time + ' s'}</h1>
+        </>
+    );
 };
 
 export default WorkerButton;
